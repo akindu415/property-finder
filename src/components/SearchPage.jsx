@@ -1,10 +1,12 @@
 // src/pages/SearchPage.jsx
 import React, { useState } from 'react';
 import propertyData from '../data/properties.json';
-import PropertyDetail from '../components/PropertyDetail';
 import DatePicker from 'react-datepicker';
+import PropertyDetail from '../components/PropertyDetail';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import './SearchStyle.css';
+
 
 
 
@@ -177,15 +179,15 @@ function SearchPage() {
           </div>
 
           {/* After Date */}
-          <div>
+          <div style={{ margin: '20px' }}>
             <label htmlFor="afterDate">Added After:</label>
             <DatePicker
-              id='afterDate'
+              id="afterDate"
               selected={afterDate}
               onChange={(date) => setAfterDate(date)}
-              dateFormat={'dd/MM/yyyy'}
-              />
-          </div>
+              dateFormat="dd/MM/yyyy"/>
+        </div>
+          
 
           {/* Postcode */}
           <div>

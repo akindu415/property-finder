@@ -1,6 +1,4 @@
-
 import React from 'react';
-import {useState} from 'react';
 
 
 //This compomemt displays the property data
