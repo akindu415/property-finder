@@ -245,7 +245,10 @@ function SearchPage() {
                             <p>Bedrooms: {prop.bedrooms}</p>
                             <button onClick={() => handleAddFavourite(prop)} className="favourite-btn">
                                 Add to Favourites
-                            </button>
+                            </button> 
+                            <Link to={`/property/${prop.id}`}>
+                            <button className="view-more-btn">View More</button>
+                        </Link>
                         </div>
                     ))}
                 </div>
