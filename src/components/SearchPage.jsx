@@ -1,17 +1,16 @@
 // src/pages/SearchPage.jsx
 import React, { useState } from 'react';
 import propertyData from '../data/properties.json';
+import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import PropertyDetail from '../components/PropertyDetail';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import './SearchStyle.css';
-
-
-
+import { Link } from 'react-router-dom';
 
 function SearchPage() {
-  //usestate hooks to store the form data which can be changed by the user
+  // State for form fields 
   const [type, setType] = useState('any');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
@@ -20,21 +19,24 @@ function SearchPage() {
   const [afterDate, setAfterDate] = useState(''); 
   const [postcode, setPostcode] = useState('');
 
-  // The selected property to show detail for
+  // For selecting a property to show detail (optional)
   const [selectedProperty, setSelectedProperty] = useState(null);
 
-  //loads all property data into a constant for filetering later
+  // The raw list of all properties from JSON
   const allProperties = propertyData.properties;
 
- //handle form submission
+  // === 2) Handle Form Submission ===
   const handleSubmit = (e) => {
-    e.preventDefault();// to prevent the browser from doing its default action of submitting the form
+    e.preventDefault();
 
-    // Clear any previously selected property 
+    // Clear any previously selected property (optional)
     setSelectedProperty(null);
+
+    // Force a re-render by updating some state or simply letting the filter function run in the JSX below
+    // (We’ll do the actual filtering in a separate function or inline).
   };
 
- //this function will filter the properties based on the user input
+  // === 3) Filter Function ===
   const getFilteredProperties = () => {
     return allProperties.filter((prop) => {
       // 3.1 Filter by type
@@ -114,11 +116,28 @@ function SearchPage() {
   // === 4) Render the UI ===
   const filteredProperties = getFilteredProperties();
 
+
+  //ADD to favourites function
+  const handleAddFavourite = (property) => {
+    //1. Load the favourites from local storage
+    const storedFavourites = localStorage.getItem('myfavourites');
+    let favourites = [];
+    if(storedFavourites){
+        favourites = JSON.parse(storedFavourites);
+    }
+
+    //2. Add the new property to the favourites
+    favourites.push(property);
+
+    //3. Save the updated favourites to local storage
+    localStorage.setItem('myfavourites', JSON.stringify(favourites));
+  };
+
   return (
     <div style={{ display: 'flex', gap: '2rem' }}>
       {/* === Left Column: The Search Form === */}
       <div style={{ minWidth: '300px' }}>
-        <h1>Property Search</h1>
+      <h1>Your Dream Home Starts From Here</h1>
         <form onSubmit={handleSubmit}>
           {/* Property Type */}
           <div>
@@ -132,7 +151,6 @@ function SearchPage() {
               fullWidth
             />
           </div>
-
 
           {/* Min/Max Price */}
           <div>
@@ -179,15 +197,16 @@ function SearchPage() {
           </div>
 
           {/* After Date */}
-          <div style={{ margin: '20px' }}>
+          <div>
             <label htmlFor="afterDate">Added After:</label>
             <DatePicker
               id="afterDate"
               selected={afterDate}
               onChange={(date) => setAfterDate(date)}
-              dateFormat="dd/MM/yyyy"/>
+              dateFormat="yyyy-MM-dd"
+              showYearDropdown
+              showMonthDropdown/>
         </div>
-          
 
           {/* Postcode */}
           <div>
@@ -209,44 +228,36 @@ function SearchPage() {
       </div>
 
       {/* === Right Column: The Results and Detail === */}
-      <div style={{ flex: 1 }}>
-        <h2>Results</h2>
-        {filteredProperties.length === 0 ? (
-          <p>No properties match your search.</p>
-        ) : (
-          <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-            {filteredProperties.map((prop) => (
-              <li key={prop.id} style={{ marginBottom: '1rem' }}>
-                <div
-                  style={{
-                    border: '1px solid #ccc',
-                    padding: '1rem',
-                    cursor: 'pointer'
-                  }}
-                  // When user clicks, we set this property as selected
-                  onClick={() => setSelectedProperty(prop)}
-                >
-                  <h3>{prop.title}</h3>
-                  <img
-                    src={prop.image}
-                    alt={prop.title}
-                    style={{ maxWidth: '200px' }}
-                  />
-                  <p>Type: {prop.type}</p>
-                  <p>Price: £{prop.price}</p>
-                  <p>Bedrooms: {prop.bedrooms}</p>
+      <div>
+            <h2>Results</h2>
+            {filteredProperties.length === 0 ? (
+                <p>No properties match your search.</p>
+            ) : (
+                <div className="property-gallery">
+                    {filteredProperties.map((prop) => (
+                        <div key={prop.id} className="property-card">
+                            <h3>
+                                <Link to={`/property/${prop.id}`}>{prop.title}</Link>
+                            </h3>
+                            <img src={prop.picture} alt={prop.title} className="property-image" />
+                            <p>Type: {prop.type}</p>
+                            <p>Price: £{prop.price}</p>
+                            <p>Bedrooms: {prop.bedrooms}</p>
+                            <button onClick={() => handleAddFavourite(prop)} className="favourite-btn">
+                                Add to Favourites
+                            </button>
+                        </div>
+                    ))}
                 </div>
-              </li>
-            ))}
-          </ul>
-        )}
+            )}
 
-        {/* Show the selected property's detail */}
-        <h2>Property Detail</h2>
-        <PropertyDetail property={selectedProperty} />
-      </div>
+            {/* Property Detail Section */}
+            <h2>Property Detail</h2>
+            {selectedProperty && <PropertyDetail property={selectedProperty} />}
+        </div>
     </div>
   );
 }
+
 
 export default SearchPage;

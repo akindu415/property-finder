@@ -5,8 +5,8 @@ import './NavbarStyle.css';
 const Navbar = () => {
     return(
         <nav className="navbar">
-            <h1>Real Estate</h1>
-            <div className="links">
+            <h1>Dream Home </h1>
+            <div className="nav-links">
                 <Link to="/">Properties</Link>
                 <Link to="/">Favourites</Link>
                 <Link to="/">Rent</Link>
