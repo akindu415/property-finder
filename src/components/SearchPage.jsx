@@ -243,9 +243,11 @@ function SearchPage() {
                             <p>Type: {prop.type}</p>
                             <p>Price: £{prop.price}</p>
                             <p>Bedrooms: {prop.bedrooms}</p>
+                            {/* Add to Favourites Button */}
                             <button onClick={() => handleAddFavourite(prop)} className="favourite-btn">
                                 Add to Favourites
                             </button> 
+                            {/* View More Button */}
                             <Link to={`/property/${prop.id}`}>
                             <button className="view-more-btn">View More</button>
                         </Link>
