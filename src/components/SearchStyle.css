@@ -1,6 +1,6 @@
 /* src/pages/SearchStyle.css */
 
-/* General page styling */
+/* General Styling */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -8,21 +8,26 @@ body {
     box-sizing: border-box;
     background-color: #f5f5f5;
     color: #333;
+    line-height: 1.6;
 }
 
-/* Page layout */
+/* Page Layout */
 .container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding: 2rem;
+    gap: 2rem;
 }
 
-/* Form styling */
+/* Form Section Styling */
 form {
+    flex: 1;
     background: white;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
 }
 
 form h1 {
@@ -30,17 +35,15 @@ form h1 {
     margin-bottom: 1rem;
 }
 
-form div {
-    margin-bottom: 1rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.5rem;
+form label {
     font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
-input, button, .react-datepicker-wrapper input {
+form input,
+button,
+.react-datepicker-wrapper input {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #ccc;
@@ -53,111 +56,155 @@ button {
     border: none;
     cursor: pointer;
     font-size: 1rem;
+    transition: background 0.3s;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-/* Results Styling */
-ul {
-    padding: 0;
-    list-style-type: none;
-}
-
-li div {
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
-
-li div:hover {
-    transform: translateY(-5px);
-}
-
-/* Property Image */
-img {
-    border-radius: 8px;
-    margin-top: 1rem;
-}
-
-/* Selected Property Detail */
-#property-detail {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: white;
-}
-
-/* Flexbox adjustments for layout */
-#property-search {
-    flex: 1;
-    margin-right: 2rem;
-}
-
-#search-results {
-    flex: 2;
-}
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        padding: 1rem;
-    }
-}
-
-
-/* PropertyList.css */
-
-/* Gallery Container Styling */
+/*  Property Gallery (Flexbox for Larger Screens) */
 .property-gallery {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: center;
     padding: 1rem;
 }
 
-/* Individual Property Card Styling */
-.property-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
+/* Property Card Styling  */
+.property-card, .favourite-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
     padding: 1rem;
     max-width: 300px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease-in-out;
-    text-align: center;
     background-color: #fff;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
 }
 
-.property-card:hover {
+.property-card:hover, .favourite-card:hover {
     transform: scale(1.05);
 }
 
-/* Image Styling */
 .property-image {
     max-width: 100%;
-    height: auto;
-    border-radius: 8px;
+    border-radius: 10px;
     margin-bottom: 1rem;
 }
 
-/* Button Styling */
-.favourite-btn {
-    padding: 0.5rem 1rem;
+/* Button Styling  */
+.favourite-btn, .view-more-btn, .remove-btn {
+    padding: 0.75rem;
     border: none;
-    background-color: #007BFF;
-    color: white;
     border-radius: 5px;
+    font-weight: bold;
     cursor: pointer;
     transition: background 0.3s;
 }
 
-.favourite-btn:hover {
-    background-color: #0056b3;
+.favourite-btn {
+    background-color: red;
+    color: white;
 }
 
+.remove-btn {
+    background-color: black;
+    color: white;
+}
+
+.view-more-btn {
+    background-color: #007BFF;
+    color: white;
+}
+
+.favourite-btn:hover, .view-more-btn:hover, .remove-btn:hover {
+    background: #0056b3;
+}
+
+/* Favourites Section Styling  */
+.favourites-list {
+    border: 2px dashed #007BFF;
+    padding: 1rem;
+    min-width: 250px;
+    min-height: 300px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/*  Individual Property Detail Styling */
+#property-detail {
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+/* Large Screens (Default Layout) */
+@media (min-width: 1024px) {
+    .container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    form {
+        flex: 1;
+        margin-right: 2rem;
+    }
+
+    .property-gallery {
+        flex: 3;
+        justify-content: flex-start;
+    }
+
+    .favourites-list {
+        flex: 1;
+    }
+}
+
+/* Smaller Devices (iPad Landscape and Below)  */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    form {
+        max-width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .property-gallery {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .favourites-list {
+        margin-top: 2rem;
+        padding: 1rem;
+    }
+}
+
+/*  Mobile-Friendly Layout  */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .property-gallery {
+        flex-direction: column;
+    }
+
+    .favourites-list {
+        padding: 1rem;
+    }
+
+    button {
+        padding: 0.5rem;
+    }
+}

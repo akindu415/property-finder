@@ -12,15 +12,7 @@ function Footer() {
           </p>
         </div>
 
-        <div className="footer-links">
-          <ul>
-            <li><a href="">Home</a></li>
-            <li><a href="">About</a></li>
-            <li><a href="">Services</a></li>
-            <li><a href="">Contact</a></li>
-          </ul>
-        </div>
-
+        
         <div className="footer-contact">
           <h3>Contact Us</h3>
           <p>Email: realestate@gmail.com</p>

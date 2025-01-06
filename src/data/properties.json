@@ -2,7 +2,7 @@
 	"properties": [
         {
             "id":"prop1",
-			"type":"House",
+			"type":"Flat",
             "bedrooms":3,
 			"price":750000,
 			"tenure":"Freehold",
@@ -10,16 +10,19 @@
 			"location":"Petts Wood Road, Petts Wood, Orpington BR5",
 			"picture":"/images/prop1/main1.png",
       "AllPics":["/images/prop1/pic1.png", "/images/prop1/pic2.png", "/images/prop1/pic3.png", "/images/prop1/pic4.png", "/images/prop1/pic5.png","/images/prop1/main1.png","/images/prop1/pic6.png"],
+      "FloorPlan": "/plans/plan1.webp",
+      "Postcode": "BR5",
 			"url":"properties/prop1.html",
             "added": {
                 "month":"October",
                 "day":12,
                 "year":2022
+
             }
         },
 		{
             "id":"prop2",
-			"type":"Flat",
+			"type":"House",
             "bedrooms":2,
 			"price":399995,
 			"tenure":"Freehold",
@@ -27,6 +30,8 @@
 			"location":"Crofton Road Orpington BR6",
 			"picture":"/images/prop2/main2.png",
       "AllPics":["/images/prop2/main2.png", "/images/prop2/pic1.png", "/images/prop2/pic2.png", "/images/prop2/pic3.png", "/images/prop2/pic4.png"],
+      "FloorPlan": "/plans/plan2.webp",
+      "Postcode": "BR6",
 			"url":"properties/prop2.html",
             "added": {
                 "month":"September",
@@ -36,7 +41,7 @@
         },
         {
             "id": "prop3",
-            "type": "Flat",
+            "type": "House",
             "bedrooms": 1,
             "price": 200000,
             "tenure": "Leasehold",
@@ -44,6 +49,8 @@
             "location": "Baker Street, London NW1",
             "picture": "/images/prop3/main3.png",
             "AllPics": ["/images/prop3/main3.png", "/images/prop3/pic1.png", "/images/prop3/pic2.png", "/images/prop3/pic3.png"],
+            "FloorPlan": "/plans/plan3.webp",
+            "Postcode": "NW1",
             "url": "properties/prop3.html",
             "added": {
               "month": "January",
@@ -61,6 +68,8 @@
             "location": "Knightsbridge, London SW3",
             "picture": "/images/prop4/main4.png",
             "AllPics": ["/images/prop4/main4.png", "/images/prop4/pic1.png", "/images/prop4/pic2.png", "/images/prop4/pic3.png"],
+            "FloorPlan": "/plans/plan4.webp",
+            "Postcode": "SW3",
             "url": "properties/prop4.html",
             "added": {
               "month": "December",
@@ -78,6 +87,8 @@
             "location": "West End Lane, London NW6",
             "picture": "/images/prop5/main5.png",
             "AllPics": ["/images/prop5/main5.png", "/images/prop5/pic1.png", "/images/prop5/pic2.png", "/images/prop5/pic3.png", "/images/prop5/pic4.png"],
+            "FloorPlan": "/plans/plan5.webp",
+            "Postcode": "NW6",
             "url": "properties/prop5.html",
             "added": {
               "month": "November",
@@ -87,7 +98,7 @@
           },
           {
             "id": "prop6",
-            "type": "House",
+            "type": "Flat",
             "bedrooms": 2,
             "price": 300000,
             "tenure": "Freehold",
@@ -95,6 +106,8 @@
             "location": "Whitechapel Road, London E1",
             "picture": "/images/prop6/main6.png",
             "AllPics": ["/images/prop6/main6.png", "/images/prop6/pic1.png", "/images/prop6/pic2.png", "/images/prop6/pic3.png"],
+            "FloorPlan": "/plans/plan6.webp",
+            "Postcode": "E1",
             "url": "properties/prop6.html",
             "added": {
               "month": "February",
@@ -104,7 +117,7 @@
           },
           {
             "id": "prop7",
-            "type": "Flat",
+            "type": "House",
             "bedrooms": 4,
             "price": 1000000,
             "tenure": "Freehold",
@@ -112,6 +125,8 @@
             "location": "High Street, Bromley BR1",
             "picture": "/images/prop7/main7.png",
             "AllPics": ["/images/prop7/main7.png", "/images/prop7/pic1.png", "/images/prop7/pic2.png", "/images/prop7/pic3.png"],
+            "FloorPlan": "/plans/plan7.webp",
+            "Postcode": "BR1",
             "url": "properties/prop7.html",
             "added": {
               "month": "March",

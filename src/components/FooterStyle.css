@@ -15,30 +15,6 @@
   margin: 0 15px;
 }
 
-.footer-about,
-.footer-links,
-.footer-contact {
-  margin-bottom: 15px;
-}
-
-.footer-links ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-links ul li {
-  margin: 8px 0;
-}
-
-.footer-links ul li a {
-  text-decoration: none;
-  color: #fff;
-  transition: color 0.3s ease;
-}
-
-.footer-links ul li a:hover {
-  color: #ff9800;
-}
 
 .footer-bottom {
   text-align: center;

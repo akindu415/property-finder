@@ -2,89 +2,128 @@
 import React, { useState } from 'react';
 import propertyData from '../data/properties.json';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useDrag, useDrop } from 'react-dnd';
 import DatePicker from 'react-datepicker';
-import PropertyDetail from '../components/PropertyDetail';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import './SearchStyle.css';
 import { Link } from 'react-router-dom';
 
+const PropertyCard = ({ property, handleAddFavourite }) => {
+    // Enable drag for property card
+    const [{ isDragging }, drag] = useDrag(() => ({
+        type: 'property',
+        item: property,
+        collect: (monitor) => ({
+            isDragging: !!monitor.isDragging(),
+        }),
+    }));
+
+    return (
+        <div
+            ref={drag}
+            className="property-card"
+            style={{ opacity: isDragging ? 0.5 : 1 }}
+        >
+            <h3>{property.title}</h3>
+            <img src={property.picture} alt={property.title} className="property-image" />
+            <p>Type: {property.type}</p>
+            <p>Price: £{property.price}</p>
+            <p>Bedrooms: {property.bedrooms}</p>
+            
+            {/* Add to Favourites Button */}
+            <button onClick={() => handleAddFavourite(property)} className="favourite-btn">
+                 Add to Favourites
+            </button>
+
+            {/* View More Button */}
+            <Link to={`/property/${property.id}`}>
+                <button className="view-more-btn">View More</button>
+            </Link>
+        </div>
+    );
+};
+
+const FavouriteCard = ({ property, handleRemoveFavourite }) => {
+  return (
+      <div className="favourite-card">
+          <h3>{property.title}</h3>
+          <img src={property.picture} alt={property.title} className="property-image" />
+          <p>Type: {property.type}</p>
+          <p>Price: £{property.price}</p>
+          <p>Bedrooms: {property.bedrooms}</p>
+          {/* Remove Button */}
+          <button onClick={() => handleRemoveFavourite(property.id)} className="remove-btn">
+               Remove
+          </button>
+      </div>
+  );
+};
+
 function SearchPage() {
-  // State for form fields 
-  const [type, setType] = useState('any');
-  const [minPrice, setMinPrice] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [minBedrooms, setMinBedrooms] = useState('');
-  const [maxBedrooms, setMaxBedrooms] = useState('');
-  const [afterDate, setAfterDate] = useState(''); 
-  const [postcode, setPostcode] = useState('');
+    // State for form fields and favourites
+    const [type, setType] = useState('any');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [minBedrooms, setMinBedrooms] = useState('');
+    const [maxBedrooms, setMaxBedrooms] = useState('');
+    const [afterDate, setAfterDate] = useState('');
+    const [postcode, setPostcode] = useState('');
+    const [favouriteProperties, setFavouriteProperties] = useState([]);
 
-  // For selecting a property to show detail (optional)
-  const [selectedProperty, setSelectedProperty] = useState(null);
+    // All properties from JSON data
+    const allProperties = propertyData.properties;
 
-  // The raw list of all properties from JSON
-  const allProperties = propertyData.properties;
+    
 
-  // === 2) Handle Form Submission ===
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Clear any previously selected property (optional)
-    setSelectedProperty(null);
-
-    // Force a re-render by updating some state or simply letting the filter function run in the JSX below
-    // (We’ll do the actual filtering in a separate function or inline).
-  };
-
-  // === 3) Filter Function ===
-  const getFilteredProperties = () => {
-    return allProperties.filter((prop) => {
-      // 3.1 Filter by type
-      if (type !== 'any' && prop.type.toLowerCase() !== type.toLowerCase()) {
-        return false;
-      }
-
-      // 3.2 Filter by price range
-      if (minPrice && prop.price < Number(minPrice)) {
-        return false;
-      }
-      if (maxPrice && prop.price > Number(maxPrice)) {
-        return false;
-      }
-
-      // 3.3 Filter by bedrooms range
-      if (minBedrooms && prop.bedrooms < Number(minBedrooms)) {
-        return false;
-      }
-      if (maxBedrooms && prop.bedrooms > Number(maxBedrooms)) {
-        return false;
-      }
-
-      // 3.4 Filter by date
-      if (afterDate) {
-        const afterDateObj = new Date(afterDate); // user’s date
-        const propertyDateObj = convertToDate(prop.added);
-
-        // Only include if propertyDateObj >= afterDateObj
-        if (propertyDateObj < afterDateObj) {
+    // Filtering properties based on criteria
+    const getFilteredProperties = () => {
+      return allProperties.filter((prop) => {
+        // 3.1 Filter by type
+        if (type !== 'any' && prop.type.toLowerCase() !== type.toLowerCase()) {
           return false;
         }
-      }
-
-      // 3.5 Filter by postcode
-      if (postcode) {
-        // For instance, check if the property's postcode starts with the user input
-        // Convert both to uppercase for a case-insensitive match
-        if (!prop.postcode.toUpperCase().startsWith(postcode.toUpperCase())) {
+  
+        // 3.2 Filter by price range
+        if (minPrice && prop.price < Number(minPrice)) {
           return false;
         }
+        if (maxPrice && prop.price > Number(maxPrice)) {
+          return false;
+        }
+  
+        // 3.3 Filter by bedrooms range
+        if (minBedrooms && prop.bedrooms < Number(minBedrooms)) {
+          return false;
+        }
+        if (maxBedrooms && prop.bedrooms > Number(maxBedrooms)) {
+          return false;
+        }
+  
+        // 3.4 Filter by date
+        if (afterDate) {
+          const afterDateObj = new Date(afterDate); // user’s date
+          const propertyDateObj = convertToDate(prop.added);
+  
+          // Only include if propertyDateObj >= afterDateObj
+          if (propertyDateObj < afterDateObj) {
+            return false;
+          }
+        }
+  
+        // 3.5 Filter by postcode
+        if (postcode && prop.Postcode) {
+          if (!prop.Postcode.toUpperCase().startsWith(postcode.toUpperCase())) {
+              return false;
+          }
       }
+  
+        return true; // If all filters pass
+      });
+  
+    };
 
-      return true; // If all filters pass
-    });
-  };
-
-  // Helper to convert {year, month, day} to a real JS Date
+     // Helper to convert {year, month, day} to a real JS Date
   const convertToDate = ({ year, month, day }) => {
     // A small helper to convert month name to index, or handle numeric months
     const monthMap = {
@@ -113,156 +152,112 @@ function SearchPage() {
     return new Date(year, monthIndex, day);
   };
 
-  // === 4) Render the UI ===
-  const filteredProperties = getFilteredProperties();
+    const filteredProperties = getFilteredProperties();
 
+    // Prevent duplicates when adding to favourites
+    const handleAddFavourite = (property) => {
+        if (!favouriteProperties.some((fav) => fav.id === property.id)) {
+            setFavouriteProperties((prev) => [...prev, property]);
+            localStorage.setItem('myfavourites', JSON.stringify([...favouriteProperties, property]));
+        } else {
+            alert('Property already added to favourites!');
+        }
+    };
 
-  //ADD to favourites function
-  const handleAddFavourite = (property) => {
-    //1. Load the favourites from local storage
-    const storedFavourites = localStorage.getItem('myfavourites');
-    let favourites = [];
-    if(storedFavourites){
-        favourites = JSON.parse(storedFavourites);
-    }
-
-    //2. Add the new property to the favourites
-    favourites.push(property);
-
-    //3. Save the updated favourites to local storage
-    localStorage.setItem('myfavourites', JSON.stringify(favourites));
+    // Remove from Favourites
+    const handleRemoveFavourite = (propertyId) => {
+      const updatedFavourites = favouriteProperties.filter((fav) => fav.id !== propertyId);
+      setFavouriteProperties(updatedFavourites);
+      localStorage.setItem('myfavourites', JSON.stringify(updatedFavourites));
   };
 
-  return (
-    <div style={{ display: 'flex', gap: '2rem' }}>
-      {/* === Left Column: The Search Form === */}
-      <div style={{ minWidth: '300px' }}>
-      <h1>Your Dream Home Starts From Here</h1>
-        <form onSubmit={handleSubmit}>
-          {/* Property Type */}
-          <div>
-            <Autocomplete
-              options={['Any', 'House', 'Flat']}
-              value={type}
-              onChange={(event, newValue) => setType(newValue || 'any')}
-              renderInput={(params) => <TextField {...params} label="Type" />}
-              getOptionLabel={(option) => option || 'Any'}
-              isOptionEqualToValue={(option, value) => option === value}
-              fullWidth
-            />
-          </div>
+    // Drop zone for drag-and-drop
+    const [, drop] = useDrop(() => ({
+        accept: 'property',
+        drop: (item) => handleAddFavourite(item),
+    }));
 
-          {/* Min/Max Price */}
-          <div>
-            <label htmlFor="minPrice">Min Price:</label>
-            <input
-              id="minPrice"
-              type="number"
-              value={minPrice}
-              placeholder="e.g. 100000"
-              onChange={(e) => setMinPrice(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="maxPrice">Max Price:</label>
-            <input
-              id="maxPrice"
-              type="number"
-              value={maxPrice}
-              placeholder="e.g. 400000"
-              onChange={(e) => setMaxPrice(e.target.value)}
-            />
-          </div>
+    return (
+        <div style={{ display: 'flex', gap: '2rem' }}>
+            {/* === Left Column: Search Form === */}
+            <div style={{ minWidth: '300px' }}>
+                <h1>Your Dream Home Starts From Here</h1>
+                <form>
+                    <Autocomplete
+                        options={['Any', 'House', 'Flat']}
+                        value={type}
+                        onChange={(event, newValue) => setType(newValue || 'any')}
+                        renderInput={(params) => <TextField {...params} label="Type" />}
+                        fullWidth
+                    />
+                    
 
-          {/* Min/Max Bedrooms */}
-          <div>
-            <label htmlFor="minBedrooms">Min Bedrooms:</label>
-            <input
-              id="minBedrooms"
-              type="number"
-              value={minBedrooms}
-              placeholder="e.g. 1"
-              onChange={(e) => setMinBedrooms(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="maxBedrooms">Max Bedrooms:</label>
-            <input
-              id="maxBedrooms"
-              type="number"
-              value={maxBedrooms}
-              placeholder="e.g. 4"
-              onChange={(e) => setMaxBedrooms(e.target.value)}
-            />
-          </div>
+                    {/* Min/Max Price */}
+                        <label>Min Price:</label>
+                        <input type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
+                        <label>Max Price:</label>
+                        <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
 
-          {/* After Date */}
-          <div>
-            <label htmlFor="afterDate">Added After:</label>
-            <DatePicker
-              id="afterDate"
-              selected={afterDate}
-              onChange={(date) => setAfterDate(date)}
-              dateFormat="yyyy-MM-dd"
-              showYearDropdown
-              showMonthDropdown/>
-        </div>
+                        {/* Min/Max Bedrooms */}
+                        <label>Min Bedrooms:</label>
+                        <input type="number" value={minBedrooms} onChange={(e) => setMinBedrooms(e.target.value)} />
+                        <label>Max Bedrooms:</label>
+                        <input type="number" value={maxBedrooms} onChange={(e) => setMaxBedrooms(e.target.value)} />
 
-          {/* Postcode */}
-          <div>
-            <label htmlFor="postcode">Postcode:</label>
-            <input
-              id="postcode"
-              type="text"
-              value={postcode}
-              placeholder="e.g. BR1"
-              onChange={(e) => setPostcode(e.target.value)}
-            />
-          </div>
+                        {/* Postcode */}
+                        <label>Postcode:</label>
+                        <input type="text" value={postcode} onChange={(e) => setPostcode(e.target.value)} />
 
-          {/* Submit Button */}
-          <div style={{ marginTop: '1rem' }}>
-            <button type="submit">Search</button>
-          </div>
-        </form>
-      </div>
 
-      {/* === Right Column: The Results and Detail === */}
-      <div>
-            <h2>Results</h2>
-            {filteredProperties.length === 0 ? (
-                <p>No properties match your search.</p>
-            ) : (
+                    {/* Date Picker */}
+                    <label>Added After:</label>
+                    <DatePicker
+                        selected={afterDate}
+                        onChange={(date) => setAfterDate(date)}
+                        dateFormat="yyyy-MM-dd"
+                        showMonthDropdown
+                        showYearDropdown
+                    />
+
+                    {/* Submit Button */}
+                    <div style={{ marginTop: '1rem' }}>
+                      <button type="submit">Search</button>
+                    </div>
+                    
+                </form>
+            </div>
+
+            {/* === Right Column: Property Listings === */}
+            <div>
+                
                 <div className="property-gallery">
                     {filteredProperties.map((prop) => (
-                        <div key={prop.id} className="property-card">
-                            <h3>
-                                <Link to={`/property/${prop.id}`}>{prop.title}</Link>
-                            </h3>
-                            <img src={prop.picture} alt={prop.title} className="property-image" />
-                            <p>Type: {prop.type}</p>
-                            <p>Price: £{prop.price}</p>
-                            <p>Bedrooms: {prop.bedrooms}</p>
-                            {/* Add to Favourites Button */}
-                            <button onClick={() => handleAddFavourite(prop)} className="favourite-btn">
-                                Add to Favourites
-                            </button> 
-                            {/* View More Button */}
-                            <Link to={`/property/${prop.id}`}>
-                            <button className="view-more-btn">View More</button>
-                        </Link>
-                        </div>
+                        <PropertyCard
+                            key={prop.id}
+                            property={prop}
+                            handleAddFavourite={handleAddFavourite}
+                        />
                     ))}
                 </div>
-            )}
+            </div>
 
-            {/* Property Detail Section */}
-            <h2>Property Detail</h2>
-            {selectedProperty && <PropertyDetail property={selectedProperty} />}
+            {/* === Favourites Section with Drag-and-Drop === */}
+            <div ref={drop} className="favourites-list">
+                <h2>Favourites</h2>
+                {favouriteProperties.length === 0 ? (
+                    <p>No favourites added yet.</p>
+                ) : (
+                    favouriteProperties.map((fav) => (
+                      <FavouriteCard
+                      key={fav.id}
+                      property={fav}
+                      handleRemoveFavourite={handleRemoveFavourite}
+                  />
+                    ))
+                )}
+            </div>
         </div>
-    </div>
-  );
+    );
 }
-
 
 export default SearchPage;
