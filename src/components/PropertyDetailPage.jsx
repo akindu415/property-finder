@@ -79,7 +79,7 @@ function PropertyDetailPage() {
             </Tabs>
 
             {/* Back to Search Link */}
-            <div style={{ marginTop: '20px' , textAlign: 'center' , fontSize: '20px' , textDecoration: 'none' }}>
+            <div style={{ marginTop: '20px' , textAlign: 'center' , fontSize: '20px' }}>
                 <a href="/">Back to Search</a>
             </div>
         </div>

@@ -20,6 +20,7 @@ const PropertyCard = ({ property, handleAddFavourite }) => {
     }));
 
     return (
+      // Property Card
         <div
             ref={drag}
             className="property-card"
@@ -44,6 +45,7 @@ const PropertyCard = ({ property, handleAddFavourite }) => {
     );
 };
 
+// Favourite Card Component
 const FavouriteCard = ({ property, handleRemoveFavourite }) => {
   return (
       <div className="favourite-card">
@@ -178,11 +180,13 @@ function SearchPage() {
     }));
 
     return (
+      // Search Page Layout
         <div style={{ display: 'flex', gap: '2rem' }}>
-            {/* === Left Column: Search Form === */}
+            {/*  Left Column: Search Form */}
             <div style={{ minWidth: '300px' }}>
                 <h1>Your Dream Home Starts From Here</h1>
                 <form>
+                    {/* Type Dropdown */}
                     <Autocomplete
                         options={['Any', 'House', 'Flat']}
                         value={type}
@@ -227,7 +231,7 @@ function SearchPage() {
                 </form>
             </div>
 
-            {/* === Right Column: Property Listings === */}
+            {/* Right Column: Property Listings  */}
             <div>
                 
                 <div className="property-gallery">
@@ -241,7 +245,7 @@ function SearchPage() {
                 </div>
             </div>
 
-            {/* === Favourites Section with Drag-and-Drop === */}
+            {/* Favourites Section with Drag-and-Drop */}
             <div ref={drop} className="favourites-list">
                 <h2>Favourites</h2>
                 {favouriteProperties.length === 0 ? (
